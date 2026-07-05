@@ -1,5 +1,11 @@
 # vanguard-group
 
+## Repo Structure
+link to EDA - [notebooks/04_exploratory_data_analysis.ipynb](notebooks/04_exploratory_data_analysis.ipynb)
+link [src/visualisation.py](src/visualisation.py)
+Other modified - [notebooks/01_data_audit.ipynb](notebooks/01_data_audit.ipynb)
+EDA results - [outputs](outputs)
+```
 vanguard-group/
 │
 ├── README.md
@@ -18,7 +24,6 @@ vanguard-group/
 │   ├── featured_engineering/
 │   │   └── 
 │   └── README.md
-│       
 │
 ├── docs/
 │   ├── project_brief.md
@@ -57,7 +62,7 @@ vanguard-group/
 │   │   ├── 3_EDA_Dashboard.py
 │   │   ├── 4_Model_Prediction.py
 │   │   ├── 5_Model_Comparison.py
-│   │   └── 6_Batch_Prediction.py 
+│   │   └── 6_Batch_Prediction.py
 │   └── app_utils.py
 │
 ├── models/
@@ -81,9 +86,8 @@ vanguard-group/
 │   ├── figures/
 │   │   ├── eda/
 │   │   ├── model_performance/
-│   │   └── 
+│   │   └──
 │   ├── tables/
-│   │   
 │   └── reports/
 │
 ├── reports/
@@ -91,6 +95,5 @@ vanguard-group/
 │   ├── final_client_report.pdf
 │   └── presentation_slides.pptx
 │
-└──  tests/
-
-
+└── tests/
+```
