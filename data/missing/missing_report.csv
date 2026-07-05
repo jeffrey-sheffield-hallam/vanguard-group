@@ -1,0 +1,119 @@
+column,missing_percentage
+AD5a,100.0
+CH5a,100.0
+household_food_security_no_children,100.0
+How often did this happen?.1,100.0
+CH5,100.0
+How often did this happen?.2,98.68329868329869
+Other.1,97.02009702009701
+Other.2,95.5994455994456
+Retired,94.94109494109495
+Not working- long term sick or disabled,93.52044352044352
+Student,92.65419265419266
+Not working- looking after house/ children,91.75329175329175
+Unemployed,91.58004158004158
+Other,89.67428967428968
+Neighbours,88.53083853083852
+Community or faith group,88.35758835758836
+Foodbank,87.52598752598753
+Working part-time,79.5911295911296
+About how many days over the past year has your household gone without heat because you could not afford to pay for gas or electricity?,78.93277893277893
+Close family or friends,76.57657657657657
+How often did this happen?,72.14137214137214
+AD1a,72.14137214137214
+CH4,65.97366597366597
+"The next questions are about the food situation of your children. In the past 12 months, was the following statement true for you? 
+ 
+ We relied on only a few kinds of low-cost food to feed our children because we were running out of money to buy food.",65.93901593901595
+"We couldn't feed our children a balanced meal, because we couldn't afford that.",65.93901593901595
+The children were not eating enough because we just couldn't afford enough food.,65.93901593901595
+Did you ever cut the size of any of the children's meals because there wasn't enough money for food?,65.93901593901595
+Did any of the children ever skip meals because there wasn't enough money for food?,65.93901593901595
+CH6,65.93901593901595
+household_food_security_children,65.93901593901595
+child_security_score,65.93901593901595
+Were the children ever hungry but you just couldn't afford more food?,65.93901593901595
+Did any of the children ever not eat for a whole day because there wasn't enough money for food?,65.93901593901595
+CH7,65.93901593901595
+CH2,65.93901593901595
+CH3,65.93901593901595
+CH1,65.93901593901595
+Working full-time,51.212751212751215
+AD4,51.03950103950103
+AD5,51.03950103950103
+Did you or other adults in your household ever not eat for a whole day because there wasn't enough money for food?,51.03950103950103
+Did you ever eat less than you felt you should because there wasn't enough money for food?,51.03950103950103
+Were you ever hungry but didn't eat because there wasn't enough money for food?,51.03950103950103
+Did you lose weight because there wasn't enough money for food?,51.03950103950103
+Did you or other adults in your household ever cut the size of your meals or skip meals because there wasn't enough money for food?,51.03950103950103
+AD1,51.03950103950103
+AD2,51.03950103950103
+AD3,51.03950103950103
+None of the above,44.10949410949411
+"In the past year, how often did you worry about making rent/ mortgage payments?",13.92931392931393
+Which of the following best describes the house you currently live in?,3.049203049203049
+HH2,0.03465003465003465
+FS4,0.0
+FS5,0.0
+msoa_code,0.0
+FS6,0.0
+FS7,0.0
+fuel-security_label,0.0
+fuel-security_score,0.0
+"In the past year, how often did you worry about making energy payments?",0.0
+response_time,0.0
+lad_code,0.0
+Consider your grocery shopping habits in the past 12 months. How often have you avoided food that requires cooking to reduce energy usage?,0.0
+incentivised,0.0
+survey_date,0.0
+FS2,0.0
+Submit Date (UTC),0.0
+Start Date (UTC),0.0
+user_id,0.0
+What is your annual household income before tax?,0.0
+FS3,0.0
+#,0.0
+FS1,0.0
+"In the past year, did anyone in your household need medical attention because your home was too cold?",0.0
+How would you describe your gender?,0.0
+What range best describes your age group?,0.0
+Do you have any physical or mental health conditions or illnesses that are limiting your day to day activities?,0.0
+Which of the following best describes your household?,0.0
+"In general, how satisfied are you with your life?",0.0
+"Compared to others in my neighbourhood, I think my life overall is...",0.0
+How often do you feel that you lack companionship?,0.0
+How often do you feel isolated from others or left out?,0.0
+To what extent are you able to turn to friends and family for help when you need it?,0.0
+"How much do you agree with the following statement? 
+ 
+ Generally, I borrow things and exchange favours with my neighbours.",0.0
+"The next questions are about your household's diet in the past 12 months, since October of last year, and whether you were able to afford the food you needed. In the past 12 months, was the following statement true for you?
+ 
+ We worried whether our food would run out before we got money to buy more.",0.0
+"The food that we bought just didn't last, and we didn't have money to get more.",0.0
+We couldn't afford to eat balanced meals.,0.0
+HH3,0.0
+HH4,0.0
+food_security_score,0.0
+"By agreeing to take part in this survey, you confirm that you have read, understood and agreed with the following statements. Please note that this survey will skip to the end if you disagree to take part: 
+ 
+ _I agree that data gathered in this study will be stored anonymously and securely, and will be used for research purposes only. _
+ 
+ _I understand that my participation is voluntary and that I am free to withdraw at any time without giving reason. _
+ 
+ _I understand that all personal information will remain confidentially within OLIO's database, and that no personally identifiable information will be shared with any third party, and that no data will be made available that can allow me to be personally identified in the results of this research. _
+ 
+ _I am 18 years of age or older. _
+ 
+ I agree to take part in this survey:",0.0
+household_food_security_label,0.0
+Do you know the Energy Performance Certificate (EPC) rating for the house you currently live in?,0.0
+Do you use a prepayment or pay-as-you-go meter to pay for your energy usage?,0.0
+"The following questions are about challenges your household may have had paying energy bills or maintaining heating in your home in the past 12 months. 
+ 
+ How frequently did your household reduce or forego expenses for basic household necessities, such as medicine or food, in order to pay an energy bill?",0.0
+"In the past year, how frequently did your household keep your home at a cold temperature that you felt was unsafe or unhealthy?",0.0
+"In the past year, how frequently did your household run behind on payments for energy bills, or receive a notice to disconnect?",0.0
+"In the last year, was there ever a time your household was unable to use your main source of heat because you could not afford to pay for gas or electricity?",0.0
+"In the last year, was there ever a time your household was unable to use your main source of heat because the equipment was broken, and you couldn't afford to pay to repair or replace the equipment?",0.0
+imd_decile,0.0
