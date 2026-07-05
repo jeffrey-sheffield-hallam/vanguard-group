@@ -2,9 +2,13 @@
 
 ## Repo Structure
 link to EDA - [notebooks/04_exploratory_data_analysis.ipynb](notebooks/04_exploratory_data_analysis.ipynb)
+
 link [src/visualisation.py](src/visualisation.py)
+
 Other modified - [notebooks/01_data_audit.ipynb](notebooks/01_data_audit.ipynb)
+
 EDA results - [outputs](outputs)
+
 ```
 vanguard-group/
 │
