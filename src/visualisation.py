@@ -1,53 +1,40 @@
-"""
-EDA — Food & Fuel Security Dataset
-
-"""
-
 import re
-import os
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from pathlib import Path
-sns.set_theme(style="whitegrid", palette="Set2")
-plt.rcParams["figure.dpi"] = 120
-plt.rcParams["savefig.bbox"] = "tight"
 
-EDA_OUTPUT_DIR = Path("../outputs")
-os.makedirs(EDA_OUTPUT_DIR, exist_ok=True)
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 
-EDA_BROAD_INSECURE = {"Low food security", "Very low food security", "Marginal food security",
-                      "Low fuel-security", "Very low fuel-security", "Marginal fuel-security"}
-EDA_SEVERE_INSECURE = {"Very low food security", "Very low fuel-security"}
+sns.set_theme(style="whitegrid")
+plt.rcParams.update({"figure.dpi": 120, "savefig.bbox": "tight"})
 
-EDA_DEMOGRAPHIC_COLS = ["gender", "age_group", "health_condition", "household_type",
-                         "employment_status_group", "income_band"]
+EDA_OUTPUT_DIR = Path("../outputs/EDA")
+EDA_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-EDA_HOUSING_COLS = ["housing_tenure_group", "epc_rating", "prepayment_meter",
-                     "private_renter", "social_renter", "owner_occupier"]
-
-EDA_CORRELATION_COLS = ["age_midpoint", "income_midpoint", "life_satisfaction",
-                         "social_isolation_score", "social_support_score",
-                         "imd_decile", "food_security_score", "fuel_security_score"]
-
-EDA_FUEL_HOUSING_CHARTS = {
-    "housing_tenure_group": "fuel_insecurity_by_housing_tenure.png",
-    "prepayment_meter":     "fuel_insecurity_by_prepayment_meter.png",
-    "epc_rating":            "fuel_insecurity_by_epc_rating.png",
+EDA_BROAD_INSECURE = {
+    "Low food security", "Very low food security", "Marginal food security",
+    "Low fuel-security", "Very low fuel-security", "Marginal fuel-security",
 }
-
-
-EDA_EMPLOYMENT_COLS = [
-    "Working full-time",
-    "Working part-time",
-    "Unemployed",
-    "Retired",
-    "Not working- looking after house/ children",
-    "Not working- long term sick or disabled",
-    "Student",
+EDA_DEMOGRAPHIC_COLS = [
+    "gender", "age_group", "health_condition", "household_type",
+    "employment_status_group", "income_band",
 ]
-
- # question headers renamed to short working names. Substring matching avoids
+EDA_HOUSING_COLS = [
+    "housing_tenure_group", "epc_rating", "prepayment_meter",
+    "private_renter", "social_renter", "owner_occupier",
+]
+EDA_CRIME_RATE_COL = "crime_rate_per_1000"
+EDA_CORRELATION_BASE_COLS = [
+    "age_midpoint", "income_midpoint", "life_satisfaction",
+    "social_isolation_score", "social_support_score", "imd_decile",
+    "food_security_score", "fuel_security_score", "food_insecure", "fuel_insecure",
+]
+EDA_EMPLOYMENT_COLS = [
+    "Working full-time", "Working part-time", "Unemployed", "Retired",
+    "Not working- looking after house/ children",
+    "Not working- long term sick or disabled", "Student",
+]
 EDA_COLUMN_RENAME_SUBSTRINGS = {
     "How would you describe your gender?": "gender",
     "What range best describes your age group?": "age_group",
@@ -66,82 +53,72 @@ EDA_COLUMN_RENAME_SUBSTRINGS = {
     "worry about making energy payments?": "energy_payment_worry",
     "annual household income before tax?": "income_band",
 }
-
-
 EDA_EXACT_RENAMES = {
     "household_food_security_label": "food_security_label",
     "fuel-security_label": "fuel_security_label",
     "fuel-security_score": "fuel_security_score",
 }
-
 EDA_AGE_MIDPOINTS = {
     "16 to 19": 17.5, "20 to 24": 22, "25 to 29": 27, "30 to 34": 32,
     "35 to 39": 37, "40 to 44": 42, "45 to 49": 47, "50 to 54": 52,
     "55 to 59": 57, "60 to 64": 62, "65 to 69": 67, "70 to 74": 72,
     "75 to 79": 77, "80 or over": 82,
 }
-
 EDA_INCOME_MIDPOINTS = {
-    "Less than £14,900 p.a.": 12000,
-    "£14,901- £24,300 p.a.": 19600,
-    "£24,301- £37,900 p.a.": 31100,
-    "£37,901- £58,900 p.a.": 48400,
+    "Less than £14,900 p.a.": 12000, "£14,901- £24,300 p.a.": 19600,
+    "£24,301- £37,900 p.a.": 31100, "£37,901- £58,900 p.a.": 48400,
     "More than £58,900 p.a.": 68900,
 }
-
 EDA_ORDINAL_MAPS = {
     "lack_companionship": {"Hardly ever or never": 0, "Some of the time": 1, "Often": 2},
     "feel_isolated": {"Hardly ever or never": 0, "Some of the time": 1, "Often": 2},
     "family_help": {"Not at all": 0, "To some extent": 1, "To a large extent": 2},
-    "neighbour_exchange": {"Definitely disagree": 0, "Tend to disagree": 1,
-                            "Tend to agree": 2, "Definitely agree": 3},
+    "neighbour_exchange": {
+        "Definitely disagree": 0, "Tend to disagree": 1,
+        "Tend to agree": 2, "Definitely agree": 3,
+    },
+}
+EDA_GROUP_ORDERS = {
+    "age_group": list(EDA_AGE_MIDPOINTS),
+    "income_band": list(EDA_INCOME_MIDPOINTS),
+    "imd_decile": list(range(1, 11)),
+}
+EDA_FOOD_DEMO_FILES = {
+    "age_group": "food_insecurity_by_age.png",
+    "employment_status_group": "food_insecurity_by_employment.png",
+}
+EDA_FUEL_HOUSING_FILES = {
+    "housing_tenure_group": "fuel_insecurity_by_housing_tenure.png",
+    "prepayment_meter": "fuel_insecurity_by_prepayment_meter.png",
+    "epc_rating": "fuel_insecurity_by_epc_rating.png",
 }
 
 
 def eda_rename_columns(df):
-
-    rename_map = {}
-    for col in df.columns:
-        for substring, new_name in EDA_COLUMN_RENAME_SUBSTRINGS.items():
-            if substring in col:
-                rename_map[col] = new_name
-                break
-    rename_map.update({k: v for k, v in EDA_EXACT_RENAMES.items() if k in df.columns})
-    return df.rename(columns=rename_map)
+    rename = {
+        col: new for col in df.columns
+        for text, new in EDA_COLUMN_RENAME_SUBSTRINGS.items() if text in col
+    }
+    rename.update({old: new for old, new in EDA_EXACT_RENAMES.items() if old in df})
+    return df.rename(columns=rename)
 
 
 def eda_build_employment_status(df):
-    present = [c for c in EDA_EMPLOYMENT_COLS if c in df.columns]
-
-    def pick(row):
-        for col in present:
-            if row[col] != "missing" and pd.notna(row[col]):
-                return col
-        return "Not specified"
-
-    df["employment_status_group"] = df[present].apply(pick, axis=1)
+    present = [col for col in EDA_EMPLOYMENT_COLS if col in df]
+    df["employment_status_group"] = df[present].replace("missing", pd.NA).bfill(axis=1).iloc[:, 0].fillna("Not specified")
     return df
 
 
-def eda_build_housing_flags(df):
-    df["private_renter"] = df["housing_tenure_group"] == "Renting from private landlord"
-    df["social_renter"] = df["housing_tenure_group"].isin([
+def eda_build_features(df):
+    tenure = df["housing_tenure_group"]
+    df["private_renter"] = tenure.eq("Renting from private landlord")
+    df["social_renter"] = tenure.isin([
         "Living in rented accommodation from Housing Association",
         "Living in rented accommodation arranged by the Local Authority",
     ])
-    df["owner_occupier"] = df["housing_tenure_group"].isin([
-        "Buying the house on a mortgage", "Owning the house outright",
-    ])
-    return df
-
-
-def eda_build_midpoints(df):
+    df["owner_occupier"] = tenure.isin(["Buying the house on a mortgage", "Owning the house outright"])
     df["age_midpoint"] = df["age_group"].map(EDA_AGE_MIDPOINTS)
     df["income_midpoint"] = df["income_band"].map(EDA_INCOME_MIDPOINTS)
-    return df
-
-
-def eda_build_ordinal_scores(df):
     for col, mapping in EDA_ORDINAL_MAPS.items():
         df[f"{col}_ord"] = df[col].map(mapping)
     df["social_isolation_score"] = df[["lack_companionship_ord", "feel_isolated_ord"]].mean(axis=1)
@@ -151,228 +128,275 @@ def eda_build_ordinal_scores(df):
     return df
 
 
-def eda_load_and_prepare(csv_path):
-    df = pd.read_csv(csv_path)
-    df = eda_rename_columns(df)
-    df = eda_build_employment_status(df)
-    df = eda_build_housing_flags(df)
-    df = eda_build_midpoints(df)
-    df = eda_build_ordinal_scores(df)
+def eda_build_insecurity_flags(df, food_col="food_security_label", fuel_col="fuel_security_label"):
+    for source, output in [(food_col, "food_insecure"), (fuel_col, "fuel_insecure")]:
+        values = df[source].replace("missing", pd.NA)
+        df[output] = values.isin(EDA_BROAD_INSECURE).astype(float).where(values.notna())
     return df
 
 
+def eda_build_gender_dummies(df):
+    gender = df["gender"].replace("missing", pd.NA)
+    dummies = pd.get_dummies(gender, prefix="gender", dtype=float)
+    dummies.columns = [re.sub(r"[^a-z0-9]+", "_", col.lower()).strip("_") for col in dummies]
+    dummies.loc[gender.isna()] = np.nan
+    return pd.concat([df, dummies], axis=1)
+
+
+def eda_load_crime_rates(path):
+    crime = pd.read_csv(path, dtype={"lad_code": "string"})[["lad_code", EDA_CRIME_RATE_COL]]
+    crime["lad_code"] = crime["lad_code"].str.strip()
+    crime[EDA_CRIME_RATE_COL] = pd.to_numeric(crime[EDA_CRIME_RATE_COL], errors="coerce")
+    return crime.dropna().drop_duplicates("lad_code")
+
+
+def eda_add_crime_rates(df, crime_csv_path):
+    out = df.drop(columns=EDA_CRIME_RATE_COL, errors="ignore").copy()
+    out["lad_code"] = out["lad_code"].astype("string").str.strip()
+    return out.merge(eda_load_crime_rates(crime_csv_path), on="lad_code", how="left")
+
+
+def eda_load_and_prepare(csv_path, crime_csv_path=None):
+    df = eda_rename_columns(pd.read_csv(csv_path))
+    df = eda_build_insecurity_flags(eda_build_features(eda_build_employment_status(df)))
+    return eda_add_crime_rates(df, crime_csv_path) if crime_csv_path else df
+
+
 def eda_save_fig(fig, filename):
-    fig.savefig(f"{EDA_OUTPUT_DIR}/{filename}")
+    fig.tight_layout()
+    fig.savefig(EDA_OUTPUT_DIR / filename)
     plt.show()
     plt.close(fig)
 
 
-def eda_rate_table(df, group_col, target_col, insecure_values=EDA_BROAD_INSECURE):
-    tmp = df[[group_col, target_col]].dropna()
-    tmp["insecure"] = tmp[target_col].isin(insecure_values)
-    rates = tmp.groupby(group_col)["insecure"].mean().mul(100)
-    counts = tmp.groupby(group_col).size()
-    out = pd.DataFrame({"insecurity_rate_pct": rates, "n": counts}).reset_index()
-    return out.sort_values("insecurity_rate_pct", ascending=False)
-
-
-def eda_rate_bar(df, group_col, target_col, title, filename,
-                  insecure_values=EDA_BROAD_INSECURE, sort_by_group=False):
-    rates = eda_rate_table(df, group_col, target_col, insecure_values)
-    if sort_by_group:
-        rates = rates.sort_values(group_col)
-    fig, ax = plt.subplots(figsize=(9, 5))
-    sns.barplot(data=rates, x=group_col, y="insecurity_rate_pct", ax=ax)
-    for i, row in rates.reset_index(drop=True).iterrows():
-        ax.text(i, row["insecurity_rate_pct"] + 0.5, f'n={int(row["n"])}', ha="center", fontsize=8)
-    ax.set_title(title)
-    ax.set_ylabel("Insecurity rate (%)")
-    plt.xticks(rotation=40, ha="right")
+def eda_composition_bar(series, title, filename):
+    shares = series.replace("missing", pd.NA).dropna().value_counts(normalize=True).mul(100)
+    fig, ax = plt.subplots(figsize=(9, 2.8))
+    left = 0
+    for label, value in shares.items():
+        ax.barh([0], value, left=left, label=f"{label} ({value:.1f}%)")
+        if value >= 7:
+            ax.text(left + value / 2, 0, f"{value:.1f}%", ha="center", va="center", fontsize=9)
+        left += value
+    ax.set(xlim=(0, 100), yticks=[], xlabel="Percentage of valid responses", title=title)
+    ax.legend(bbox_to_anchor=(0.5, -0.35), loc="upper center", ncol=min(3, len(shares)), frameon=False)
     eda_save_fig(fig, filename)
-    return rates
+    return shares
+
+
+def eda_proportion_table(df, group_col, target_col):
+    tmp = df[[group_col, target_col]].replace("missing", pd.NA).dropna().copy()
+    tmp["status"] = np.where(tmp[target_col].isin(EDA_BROAD_INSECURE), "Insecure", "Secure")
+    counts = pd.crosstab(tmp[group_col], tmp["status"]).reindex(columns=["Secure", "Insecure"], fill_value=0)
+    pct = counts.div(counts.sum(axis=1), axis=0).mul(100)
+    return pct.assign(n=counts.sum(axis=1))
+
+
+def eda_proportion_bar(df, group_col, target_col, title, filename, top_n=None):
+    table = eda_proportion_table(df, group_col, target_col)
+    order = EDA_GROUP_ORDERS.get(group_col)
+    if order:
+        table = table.reindex([value for value in order if value in table.index])
+    else:
+        table = table.sort_values("Insecure", ascending=False)
+    if top_n:
+        table = table.nlargest(top_n, "Insecure")
+
+    labels = [f"{value} (n={int(n)})" for value, n in zip(table.index, table["n"])]
+    fig, ax = plt.subplots(figsize=(10, max(4, 0.42 * len(table))))
+    ax.barh(labels, table["Secure"], label="Secure")
+    ax.barh(labels, table["Insecure"], left=table["Secure"], label="Insecure")
+    for i, value in enumerate(table["Insecure"]):
+        ax.text(99, i, f"{value:.1f}%", ha="right", va="center", fontsize=8)
+    ax.set(xlim=(0, 100), xlabel="Proportion of respondents (%)", title=title)
+    ax.invert_yaxis()
+    ax.legend(loc="lower right", frameon=False)
+    eda_save_fig(fig, filename)
+    return table.reset_index()
 
 
 def eda_boxplot(df, score_col, label_col, title, filename):
-    tmp = df[[score_col, label_col]].dropna()
+    tmp = df[[score_col, label_col]].replace("missing", pd.NA).dropna()
     fig, ax = plt.subplots(figsize=(8, 5))
     sns.boxplot(data=tmp, x=label_col, y=score_col, ax=ax)
-    sns.stripplot(data=tmp, x=label_col, y=score_col, ax=ax, color="black", alpha=0.15, size=2)
+    sns.stripplot(data=tmp, x=label_col, y=score_col, alpha=0.15, size=2, ax=ax)
     ax.set_title(title)
-    plt.xticks(rotation=30, ha="right")
+    ax.tick_params(axis="x", rotation=30)
+    plt.setp(ax.get_xticklabels(), ha="right")
     eda_save_fig(fig, filename)
-    print(tmp.groupby(label_col)[score_col].agg(["mean", "median", "std", "count"]))
 
 
-
-# A. DATA QUALITY EDA
-
+# A. DATA QUALITY
 
 def section_a_data_quality(df, response_time_col="response_time", incentivised_col="incentivised"):
-    miss = (df.isna().mean() * 100).sort_values(ascending=False)
-    miss = miss[miss > 0].head(30)
-    if len(miss):
-        fig, ax = plt.subplots(figsize=(9, max(4, 0.3 * len(miss))))
-        sns.barplot(x=miss.values, y=miss.index, ax=ax, color="#e07a5f")
-        ax.set_xlabel("% missing")
-        ax.set_title("Top 30 columns by missingness")
-        eda_save_fig(fig, "missing_values_top_30.png")
+    missing = (df.isna().mean() * 100).sort_values(ascending=False)
+    missing = missing[missing > 0].head(30)
+    fig, ax = plt.subplots(figsize=(9, max(4, 0.3 * len(missing))))
+    sns.barplot(x=missing.values, y=missing.index, ax=ax)
+    ax.set(xlabel="Missing values (%)", title="Top 30 columns by missingness")
+    eda_save_fig(fig, "missing_values_top_30.png")
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    sns.histplot(df[response_time_col].dropna(), bins=40, kde=True, ax=ax, color="#3d5a80")
-    ax.set_title("Response time distribution")
-    ax.set_xlabel("Response time")
+    ax.hist(df[response_time_col].dropna(), bins=40)
+    ax.set(xlabel="Response time", title="Response time distribution")
     eda_save_fig(fig, "response_time_histogram.png")
-
-    print("Full-row duplicates:", df.duplicated().sum())
-    print("Valid responses:", len(df))
-
-    inc_counts = df[incentivised_col].value_counts()
-    fig, ax = plt.subplots(figsize=(6, 5))
-    sns.barplot(x=inc_counts.index.astype(str), y=inc_counts.values, ax=ax, color="#81b29a")
-    ax.set_title("Incentivised vs non-incentivised responses")
-    ax.set_ylabel("Count")
-    eda_save_fig(fig, "incentivised_distribution.png")
-    print(inc_counts)
+    eda_composition_bar(df[incentivised_col], "Share of incentivised responses", "incentivised_distribution.png")
 
 
-# B. TARGET DISTRIBUTION EDA
-
+# B. TARGET DISTRIBUTIONS
 
 def section_b_target_distribution(df, food_col="food_security_label", fuel_col="fuel_security_label"):
-    food_counts = df[food_col].value_counts()
-    fig, ax = plt.subplots(figsize=(7, 5))
-    sns.barplot(x=food_counts.index.astype(str), y=food_counts.values, ax=ax, color="#f2cc8f")
-    ax.set_title("Food security label distribution")
-    plt.xticks(rotation=30, ha="right")
-    eda_save_fig(fig, "food_security_distribution.png")
-    print(food_counts)
-    print(f"Broad food insecurity rate: {df[food_col].isin(EDA_BROAD_INSECURE).mean() * 100:.2f}%")
-    print(f"Severe food insecurity rate: {df[food_col].isin(EDA_SEVERE_INSECURE).mean() * 100:.2f}%")
+    for col, label, filename in [
+        (food_col, "Food security composition", "food_security_distribution.png"),
+        (fuel_col, "Fuel security composition", "fuel_security_distribution.png"),
+    ]:
+        eda_composition_bar(df[col], label, filename)
 
-    fuel_counts = df[fuel_col].value_counts()
-    fig, ax = plt.subplots(figsize=(7, 5))
-    sns.barplot(x=fuel_counts.index.astype(str), y=fuel_counts.values, ax=ax, color="#81b29a")
-    ax.set_title("Fuel security label distribution")
-    plt.xticks(rotation=30, ha="right")
-    eda_save_fig(fig, "fuel_security_distribution.png")
-    print(fuel_counts)
-    print(f"Broad fuel insecurity rate: {df[fuel_col].isin(EDA_BROAD_INSECURE).mean() * 100:.2f}%")
-    print(f"Severe fuel insecurity rate: {df[fuel_col].isin(EDA_SEVERE_INSECURE).mean() * 100:.2f}%")
-
-    tmp = df[[food_col, fuel_col]].dropna()
-    tmp["food_insecure"] = tmp[food_col].isin(EDA_BROAD_INSECURE)
-    tmp["fuel_insecure"] = tmp[fuel_col].isin(EDA_BROAD_INSECURE)
-    overlap = pd.crosstab(tmp["food_insecure"], tmp["fuel_insecure"])
+    overlap = df[[food_col, fuel_col]].replace("missing", pd.NA).dropna()
+    food = np.where(overlap[food_col].isin(EDA_BROAD_INSECURE), "Insecure", "Secure")
+    fuel = np.where(overlap[fuel_col].isin(EDA_BROAD_INSECURE), "Insecure", "Secure")
+    overlap_pct = pd.crosstab(food, fuel, normalize="all").mul(100).reindex(
+        index=["Secure", "Insecure"], columns=["Secure", "Insecure"], fill_value=0
+    )
     fig, ax = plt.subplots(figsize=(6, 5))
-    sns.heatmap(overlap, annot=True, fmt="d", cmap="Blues", ax=ax)
-    ax.set_title("Food vs fuel insecurity overlap")
-    ax.set_xlabel("Fuel insecure")
-    ax.set_ylabel("Food insecure")
+    sns.heatmap(overlap_pct, annot=True, fmt=".1f", cmap="Blues", cbar_kws={"label": "% of valid respondents"}, ax=ax)
+    ax.set(xlabel="Fuel security", ylabel="Food security", title="Food and fuel insecurity overlap (%)")
     eda_save_fig(fig, "food_vs_fuel_overlap.png")
-    print(f"Insecure in BOTH: {((tmp['food_insecure']) & (tmp['fuel_insecure'])).mean() * 100:.2f}%")
 
 
+# C. DEMOGRAPHICS
 
-# C. DEMOGRAPHIC EDA
-
-EDA_FOOD_DEMO_CHARTS = {
-    "income_band":              "food_insecurity_by_income.png",
-    "employment_status_group":  "food_insecurity_by_employment.png",
-    "household_type":           "food_insecurity_by_household_type.png",
-    "health_condition":         "food_insecurity_by_health_condition.png",
-    "age_group":                "food_insecurity_by_age.png",
-}
+def eda_group_section(df, columns, target_col, outcome, file_overrides=None):
+    file_overrides = file_overrides or {}
+    for col in columns:
+        filename = file_overrides.get(col, f"{outcome.lower()}_insecurity_by_{col}.png")
+        eda_proportion_bar(df, col, target_col, f"{outcome} security composition by {col}", filename)
 
 
 def section_c_food_demographics(df, target_col="food_security_label"):
-    for demo_col in EDA_DEMOGRAPHIC_COLS:
-        filename = EDA_FOOD_DEMO_CHARTS.get(demo_col, f"food_insecurity_by_{demo_col}.png")
-        eda_rate_bar(df, demo_col, target_col, f"Food insecurity rate by {demo_col}", filename)
+    eda_group_section(df, EDA_DEMOGRAPHIC_COLS, target_col, "Food", EDA_FOOD_DEMO_FILES)
 
 
 def section_c_fuel_demographics(df, target_col="fuel_security_label"):
-    for demo_col in EDA_DEMOGRAPHIC_COLS:
-        eda_rate_bar(df, demo_col, target_col, f"Fuel insecurity rate by {demo_col}",
-                     f"fuel_insecurity_by_{demo_col}.png")
+    eda_group_section(df, EDA_DEMOGRAPHIC_COLS, target_col, "Fuel")
 
 
-
-# D. HOUSING EDA
-
+# D. HOUSING
 
 def section_d_food_housing(df, target_col="food_security_label"):
-    for h_col in EDA_HOUSING_COLS:
-        eda_rate_bar(df, h_col, target_col, f"Food insecurity rate by {h_col}",
-                     f"food_insecurity_by_{h_col}.png")
+    eda_group_section(df, EDA_HOUSING_COLS, target_col, "Food")
 
 
 def section_d_fuel_housing(df, target_col="fuel_security_label"):
-    for h_col in EDA_HOUSING_COLS:
-        filename = EDA_FUEL_HOUSING_CHARTS.get(h_col, f"fuel_insecurity_by_{h_col}.png")
-        eda_rate_bar(df, h_col, target_col, f"Fuel insecurity rate by {h_col}", filename)
-    for worry_col in ["rent_mortgage_worry", "energy_payment_worry"]:
-        print(eda_rate_table(df, worry_col, target_col))
+    eda_group_section(df, EDA_HOUSING_COLS, target_col, "Fuel", EDA_FUEL_HOUSING_FILES)
 
 
-
-# E. SOCIAL ISOLATION EDA
-
+# E. SOCIAL ISOLATION AND SUPPORT
 
 def section_e_social_isolation(df, food_col="food_security_label", fuel_col="fuel_security_label"):
-    eda_boxplot(df, "social_isolation_score", food_col,
-                "Social isolation score by food security label", "social_isolation_by_food_security.png")
-    eda_boxplot(df, "social_isolation_score", fuel_col,
-                "Social isolation score by fuel security label", "social_isolation_by_fuel_security.png")
+    eda_boxplot(df, "social_isolation_score", food_col, "Social isolation by food security", "social_isolation_by_food_security.png")
+    eda_boxplot(df, "social_isolation_score", fuel_col, "Social isolation by fuel security", "social_isolation_by_fuel_security.png")
 
-    tmp = df[["family_help_score", "neighbour_exchange_score", food_col]].dropna()
-    tmp_melt = tmp.melt(id_vars=food_col, value_vars=["family_help_score", "neighbour_exchange_score"],
-                         var_name="support_type", value_name="score")
+    tmp = df[["family_help_score", "neighbour_exchange_score", food_col]].replace("missing", pd.NA).dropna()
+    melted = tmp.melt(id_vars=food_col, var_name="support_type", value_name="score")
     fig, ax = plt.subplots(figsize=(9, 5))
-    sns.boxplot(data=tmp_melt, x=food_col, y="score", hue="support_type", ax=ax)
-    ax.set_title("Family help & neighbour exchange scores by food security label")
-    plt.xticks(rotation=30, ha="right")
+    sns.boxplot(data=melted, x=food_col, y="score", hue="support_type", ax=ax)
+    ax.set_title("Family help and neighbour exchange by food security")
+    ax.tick_params(axis="x", rotation=30)
+    plt.setp(ax.get_xticklabels(), ha="right")
     eda_save_fig(fig, "social_support_by_food_security.png")
 
 
-
-# F. GEOGRAPHY EDA
-#
-# NOTE: crime_rate_per_1000 and green_space_pct aren't in this dataset, so
-# the external-feature quintile charts from the original template are left
-# out. lad_code, msoa_code and imd_decile are all present and used below.
-# msoa_code is very high-cardinality (mostly 1-2 respondents per area) so
-# it isn't charted directly here — lad_code (borough-level) is the more
-# useful granularity for a top-20 bar chart.
-
+# F. GEOGRAPHY
 
 def section_f_geography(df, food_col="food_security_label", fuel_col="fuel_security_label"):
-    eda_rate_bar(df, "imd_decile", food_col, "Food insecurity rate by IMD decile",
-                 "food_insecurity_by_imd_decile.png", sort_by_group=True)
-    eda_rate_bar(df, "imd_decile", fuel_col, "Fuel insecurity rate by IMD decile",
-                 "fuel_insecurity_by_imd_decile.png", sort_by_group=True)
-
-    top_food = eda_rate_table(df, "lad_code", food_col).head(20)
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.barplot(data=top_food, x="lad_code", y="insecurity_rate_pct", ax=ax)
-    ax.set_title("Food insecurity rate by borough (top 20)")
-    plt.xticks(rotation=45, ha="right")
-    eda_save_fig(fig, "food_insecurity_by_borough.png")
-
-    top_fuel = eda_rate_table(df, "lad_code", fuel_col).head(20)
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.barplot(data=top_fuel, x="lad_code", y="insecurity_rate_pct", ax=ax)
-    ax.set_title("Fuel insecurity rate by borough (top 20)")
-    plt.xticks(rotation=45, ha="right")
-    eda_save_fig(fig, "fuel_insecurity_by_borough.png")
+    for target, outcome in [(food_col, "Food"), (fuel_col, "Fuel")]:
+        eda_proportion_bar(
+            df, "imd_decile", target, f"{outcome} security composition by IMD decile",
+            f"{outcome.lower()}_insecurity_by_imd_decile.png",
+        )
+        eda_proportion_bar(
+            df, "lad_code", target, f"Top 20 boroughs by {outcome.lower()} insecurity",
+            f"{outcome.lower()}_insecurity_by_borough.png", top_n=20,
+        )
 
 
+# G. INDIVIDUAL-LEVEL CORRELATION
 
-# G. CORRELATION / ASSOCIATION EDA
-
-def section_g_correlation(df):
-    corr = df[EDA_CORRELATION_COLS].corr()
-    fig, ax = plt.subplots(figsize=(9, 7))
+def section_g_correlation(df, food_col="food_security_label", fuel_col="fuel_security_label"):
+    corr_df = eda_build_gender_dummies(eda_build_insecurity_flags(df.copy(), food_col, fuel_col))
+    gender_cols = [col for col in corr_df if col.startswith("gender_")]
+    corr_cols = [col for col in EDA_CORRELATION_BASE_COLS + gender_cols if col in corr_df]
+    corr = corr_df[corr_cols].apply(pd.to_numeric, errors="coerce").corr()
+    fig, ax = plt.subplots(figsize=(12, 9))
     sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", center=0, vmin=-1, vmax=1, ax=ax)
-    ax.set_title("Correlation heatmap — numerical engineered features")
+    ax.set_title("Individual-level correlation heatmap including gender indicators")
     eda_save_fig(fig, "correlation_heatmap.png")
+    return corr
+
+
+# H. MAIN BOROUGH-LEVEL CRIME ANALYSIS
+
+def eda_build_borough_crime_table(df):
+    borough = df.groupby("lad_code", as_index=False).agg(
+        crime_rate_per_1000=(EDA_CRIME_RATE_COL, "first"),
+        food_insecurity_rate_pct=("food_insecure", lambda x: x.mean() * 100),
+        fuel_insecurity_rate_pct=("fuel_insecure", lambda x: x.mean() * 100),
+        mean_imd_decile=("imd_decile", "mean"),
+        respondent_count=("lad_code", "size"),
+    ).dropna(subset=[EDA_CRIME_RATE_COL])
+    borough["log_crime_rate"] = np.log1p(borough[EDA_CRIME_RATE_COL])
+    return borough
+
+
+def section_h_crime_analysis(df, crime_csv_path=None):
+    crime_df = eda_add_crime_rates(df, crime_csv_path) if crime_csv_path else df.copy()
+    borough = eda_build_borough_crime_table(crime_df)
+    outcomes = ["food_insecurity_rate_pct", "fuel_insecurity_rate_pct"]
+    summary = pd.DataFrame({
+        "outcome": outcomes,
+        "pearson_r": [borough[[EDA_CRIME_RATE_COL, col]].corr().iloc[0, 1] for col in outcomes],
+        "spearman_rho": [borough[[EDA_CRIME_RATE_COL, col]].corr(method="spearman").iloc[0, 1] for col in outcomes],
+    })
+    borough.to_csv(EDA_OUTPUT_DIR / "borough_crime_analysis.csv", index=False)
+    summary.to_csv(EDA_OUTPUT_DIR / "crime_correlation_summary.csv", index=False)
+
+    crime_cols = [EDA_CRIME_RATE_COL, *outcomes, "mean_imd_decile"]
+    fig, ax = plt.subplots(figsize=(7, 6))
+    sns.heatmap(
+        borough[crime_cols].corr(method="spearman"), annot=True, fmt=".2f",
+        cmap="coolwarm", center=0, vmin=-1, vmax=1, ax=ax,
+    )
+    ax.set_title("Borough-level crime associations: Spearman correlation")
+    eda_save_fig(fig, "crime_borough_spearman_heatmap.png")
+
+    for outcome, label, filename in [
+        ("food_insecurity_rate_pct", "Food insecurity rate (%)", "crime_vs_food_insecurity.png"),
+        ("fuel_insecurity_rate_pct", "Fuel insecurity rate (%)", "crime_vs_fuel_insecurity.png"),
+    ]:
+        fig, ax = plt.subplots(figsize=(8, 6))
+        sns.regplot(data=borough, x="log_crime_rate", y=outcome, scatter_kws={"s": 60, "alpha": 0.75}, ax=ax)
+        ax.set(xlabel="Log-transformed crime rate per 1,000", ylabel=label, title=f"Borough crime rate versus {label.lower()}")
+        eda_save_fig(fig, filename)
+
+    borough["crime_quartile"] = pd.qcut(
+        borough[EDA_CRIME_RATE_COL], 4,
+        labels=["Lowest", "Low-medium", "High-medium", "Highest"], duplicates="drop",
+    )
+    quartiles = borough.groupby("crime_quartile", observed=True, as_index=False).agg(
+        food_insecurity_rate_pct=("food_insecurity_rate_pct", "mean"),
+        fuel_insecurity_rate_pct=("fuel_insecurity_rate_pct", "mean"),
+        borough_count=("lad_code", "size"),
+    )
+    quartiles.to_csv(EDA_OUTPUT_DIR / "crime_quartile_summary.csv", index=False)
+    plot_df = quartiles.melt(
+        id_vars=["crime_quartile", "borough_count"], value_vars=outcomes,
+        var_name="outcome", value_name="insecurity_rate_pct",
+    )
+    fig, ax = plt.subplots(figsize=(9, 5))
+    sns.barplot(data=plot_df, x="crime_quartile", y="insecurity_rate_pct", hue="outcome", ax=ax)
+    ax.set(xlabel="Crime-rate quartile", ylabel="Average insecurity rate (%)", title="Average insecurity rate by borough crime quartile")
+    eda_save_fig(fig, "insecurity_by_crime_quartile.png")
+    return borough, summary
+
 
