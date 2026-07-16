@@ -5,16 +5,12 @@ import json
 import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
-from catboost import CatBoostClassifier
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
-from xgboost import XGBClassifier
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -193,91 +189,29 @@ def save_training_log(target, model_name, log_df):
     return log_path, plot_path
 
 
-def save_model_result(target, model_name, model, data, val_metrics, params, extra=None):
-    model_dir = target_model_dir(target)
-    model_path = model_dir / MODEL_FILES[model_name]
-    joblib.dump(model, model_path)
-
-    log_df = pd.DataFrame([{ "split": "validation", **val_metrics }])
-    log_path, plot_path = save_training_log(target, model_name, log_df)
-
-    entry = {
-        "model_path": model_path,
-        "target_col": data["target_col"],
-        "classes": data["classes"],
-        "params": params,
-        "val_metrics": val_metrics,
-        "training_log_path": log_path,
-        "training_plot_path": plot_path,
-        "updated_at": datetime.now().isoformat(timespec="seconds"),
-    }
-    if extra:
-        entry.update(extra)
-    update_metadata(target, model_name, entry)
-    return model_path, log_path, plot_path
+# -----------------------------------------------------------------------------
+# Traditional machine-learning models
+# -----------------------------------------------------------------------------
 
 
-def train_sklearn_model(target, model_name, estimator, path=DATA_PATH, save=True, params=None):
-    data = prepare_target_data(target, path)
-    model = Pipeline([
-        ("preprocess", make_preprocessor(data["X_train"])),
-        ("model", estimator),
-    ])
-    model.fit(data["X_train"], data["y_train"])
-
-    val_pred = model.predict(data["X_val"])
-    val_metrics = classification_metrics(data["y_val"], val_pred)
-    result = {"model_name": model_name, "model": model, "data": data, "val_metrics": val_metrics}
-
-    if save:
-        model_path, log_path, plot_path = save_model_result(
-            target, model_name, model, data, val_metrics, params or {}
-        )
-        result.update({"model_path": model_path, "training_log_path": log_path, "training_plot_path": plot_path})
-    return result
+def train_logistic_regression(target="food", path=DATA_PATH, **kwargs):
+    # to be computed
+    pass
 
 
-def train_logistic_regression(target="food", path=DATA_PATH, C=1.0, max_iter=1000,
-                              class_weight=None, save=True, **kwargs):
-    params = {"C": C, "max_iter": max_iter, "class_weight": class_weight, **kwargs}
-    estimator = LogisticRegression(random_state=RANDOM_STATE, **params)
-    return train_sklearn_model(target, "logistic_regression", estimator, path, save, params)
+def train_random_forest(target="food", path=DATA_PATH, **kwargs):
+    # to be computed
+    pass
 
 
-def train_random_forest(target="food", path=DATA_PATH, n_estimators=300, max_depth=None,
-                        min_samples_split=2, class_weight=None, save=True, **kwargs):
-    params = {
-        "n_estimators": n_estimators,
-        "max_depth": max_depth,
-        "min_samples_split": min_samples_split,
-        "class_weight": class_weight,
-        **kwargs,
-    }
-    estimator = RandomForestClassifier(random_state=RANDOM_STATE, **params)
-    return train_sklearn_model(target, "random_forest", estimator, path, save, params)
+def train_xgboost(target="food", path=DATA_PATH, **kwargs):
+    # to be computed
+    pass
 
 
-def train_xgboost(target="food", path=DATA_PATH, n_estimators=300, learning_rate=0.05,
-                  max_depth=4, subsample=1.0, colsample_bytree=1.0, save=True, **kwargs):
-    params = {
-        "n_estimators": n_estimators,
-        "learning_rate": learning_rate,
-        "max_depth": max_depth,
-        "subsample": subsample,
-        "colsample_bytree": colsample_bytree,
-        "eval_metric": "mlogloss",
-        **kwargs,
-    }
-    estimator = XGBClassifier(random_state=RANDOM_STATE, **params)
-    return train_sklearn_model(target, "xgboost", estimator, path, save, params)
-
-
-def train_catboost(target="food", path=DATA_PATH, iterations=300, learning_rate=0.05,
-                   depth=6, save=True, **kwargs):
-    params = {"iterations": iterations, "learning_rate": learning_rate, "depth": depth,
-              "verbose": False, **kwargs}
-    estimator = CatBoostClassifier(random_seed=RANDOM_STATE, **params)
-    return train_sklearn_model(target, "catboost", estimator, path, save, params)
+def train_catboost(target="food", path=DATA_PATH, **kwargs):
+    # to be computed
+    pass
 
 
 def build_tensorflow_mlp(input_dim, n_classes, hidden_layers=(64, 32), dropout=0.2,
@@ -362,20 +296,18 @@ def train_tensorflow_mlp(target="food", path=DATA_PATH, epochs=30, learning_rate
 
 
 def train_all_ml_models(target="food", path=DATA_PATH):
-    return {
-        "logistic_regression": train_logistic_regression(target, path),
-        "random_forest": train_random_forest(target, path),
-        "xgboost": train_xgboost(target, path),
-        "catboost": train_catboost(target, path),
-    }
+    # to be computed
+    pass
 
 
 def train_food_ml_models(path=DATA_PATH):
-    return train_all_ml_models("food", path)
+    # to be computed
+    pass
 
 
 def train_fuel_ml_models(path=DATA_PATH):
-    return train_all_ml_models("fuel", path)
+    # to be computed
+    pass
 
 
 def train_both_tensorflow_models(path=DATA_PATH, **kwargs):
@@ -399,7 +331,12 @@ def load_saved_model(target, model_name):
             "model": tf.keras.models.load_model(model_dir / MODEL_FILES[model_name]),
             "preprocessor": joblib.load(model_dir / "tensorflow_mlp_preprocessor.joblib"),
         }
-    return {"model": joblib.load(model_dir / MODEL_FILES[model_name])}
+    model_path = model_dir / MODEL_FILES[model_name]
+    if not model_path.exists():
+        raise NotImplementedError(
+            f"{model_name} has not been computed yet. Implement its training section first."
+        )
+    return {"model": joblib.load(model_path)}
 
 
 def predict_saved_model(target, model_name, X):
@@ -410,7 +347,7 @@ def predict_saved_model(target, model_name, X):
     return saved["model"].predict(X)
 
 
-def test_saved_model(target="food", model_name="random_forest", path=DATA_PATH):
+def test_saved_model(target="food", model_name="tensorflow_mlp", path=DATA_PATH):
     data = prepare_target_data(target, path)
     y_pred = predict_saved_model(target, model_name, data["X_test"])
     metrics = classification_metrics(data["y_test"], y_pred)
