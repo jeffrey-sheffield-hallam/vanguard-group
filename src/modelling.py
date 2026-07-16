@@ -47,7 +47,7 @@ METRIC_COLS = ["accuracy", "precision_weighted", "recall_weighted", "f1_weighted
 
 
 def load_feature_data(path=DATA_PATH):
-    return pd.read_csv(path)
+    return pd.read_csv(path, encoding="cp1252")
 
 
 def resolve_target(target):
