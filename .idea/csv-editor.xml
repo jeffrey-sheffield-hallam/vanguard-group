@@ -38,6 +38,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\outputs\Training\food_insecurity\model_results_table.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\outputs\Training\food_insecurity\tensorflow_mlp_training_log.csv">
           <value>
             <Attribute>
