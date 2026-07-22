@@ -400,3 +400,158 @@ def section_h_crime_analysis(df, crime_csv_path=None):
     return borough, summary
 
 
+# I. POWER BI CSV EXPORTS
+
+POWERBI_OUTPUT_DIR = Path("../data/unified_csv")
+LONDON_BOROUGH_NAMES = {
+    "E09000001": "City of London", "E09000002": "Barking and Dagenham",
+    "E09000003": "Barnet", "E09000004": "Bexley", "E09000005": "Brent",
+    "E09000006": "Bromley", "E09000007": "Camden", "E09000008": "Croydon",
+    "E09000009": "Ealing", "E09000010": "Enfield", "E09000011": "Greenwich",
+    "E09000012": "Hackney", "E09000013": "Hammersmith and Fulham",
+    "E09000014": "Haringey", "E09000015": "Harrow", "E09000016": "Havering",
+    "E09000017": "Hillingdon", "E09000018": "Hounslow", "E09000019": "Islington",
+    "E09000020": "Kensington and Chelsea", "E09000021": "Kingston upon Thames",
+    "E09000022": "Lambeth", "E09000023": "Lewisham", "E09000024": "Merton",
+    "E09000025": "Newham", "E09000026": "Redbridge",
+    "E09000027": "Richmond upon Thames", "E09000028": "Southwark",
+    "E09000029": "Sutton", "E09000030": "Tower Hamlets",
+    "E09000031": "Waltham Forest", "E09000032": "Wandsworth",
+    "E09000033": "Westminster",
+}
+
+
+def prepare_powerbi_dashboard(df):
+    out = df.replace("missing", pd.NA).copy()
+    if "user_id" not in out:
+        out["user_id"] = np.arange(1, len(out) + 1)
+
+    out = eda_build_insecurity_flags(out)
+    out["food_security_status"] = out["food_insecure"].map({0.0: "Secure", 1.0: "Insecure"})
+    out["fuel_security_status"] = out["fuel_insecure"].map({0.0: "Secure", 1.0: "Insecure"})
+    valid_both = out[["food_insecure", "fuel_insecure"]].notna().all(axis=1)
+    out["both_insecure"] = ((out["food_insecure"] == 1) & (out["fuel_insecure"] == 1)).astype(float).where(valid_both)
+    out["severe_food_insecure"] = out["food_security_label"].eq("Very low food security").astype(float).where(out["food_security_label"].notna())
+    out["severe_fuel_insecure"] = out["fuel_security_label"].eq("Very low fuel-security").astype(float).where(out["fuel_security_label"].notna())
+    out["borough_name"] = out.get("borough_name", out["lad_code"].map(LONDON_BOROUGH_NAMES))
+    out["age_order"] = out["age_group"].map({value: i for i, value in enumerate(EDA_AGE_MIDPOINTS, 1)})
+    out["income_order"] = out["income_band"].map({value: i for i, value in enumerate(EDA_INCOME_MIDPOINTS, 1)})
+    out["log_crime_rate"] = np.log1p(out[EDA_CRIME_RATE_COL])
+
+    crime = out[["lad_code", EDA_CRIME_RATE_COL]].dropna().drop_duplicates("lad_code")
+    crime["crime_quartile"] = pd.qcut(
+        crime[EDA_CRIME_RATE_COL], 4,
+        labels=["Lowest", "Low-medium", "High-medium", "Highest"],
+        duplicates="drop",
+    )
+    crime["crime_quartile_order"] = crime["crime_quartile"].map(
+        {"Lowest": 1, "Low-medium": 2, "High-medium": 3, "Highest": 4}
+    )
+    out = out.merge(crime.drop(columns=EDA_CRIME_RATE_COL), on="lad_code", how="left")
+    return out
+
+
+def build_security_long(dashboard):
+    base = [
+        "user_id", "gender", "age_group", "age_order", "health_condition",
+        "household_type", "employment_status_group", "income_band", "income_order",
+        "housing_tenure_group", "epc_rating", "prepayment_meter", "private_renter",
+        "social_renter", "owner_occupier", "life_satisfaction",
+        "social_isolation_score", "social_support_score", "lad_code", "borough_name",
+        "imd_decile", EDA_CRIME_RATE_COL, "log_crime_rate", "crime_quartile",
+        "crime_quartile_order",
+    ]
+    base = [col for col in base if col in dashboard]
+    frames = []
+    for security_type, prefix in [("Food", "food"), ("Fuel", "fuel")]:
+        cols = base + [
+            f"{prefix}_security_label", f"{prefix}_security_score",
+            f"{prefix}_security_status", f"{prefix}_insecure",
+            f"severe_{prefix}_insecure",
+        ]
+        part = dashboard[cols].copy().rename(columns={
+            f"{prefix}_security_label": "security_label",
+            f"{prefix}_security_score": "security_score",
+            f"{prefix}_security_status": "security_status",
+            f"{prefix}_insecure": "insecure_flag",
+            f"severe_{prefix}_insecure": "severe_flag",
+        })
+        part.insert(1, "security_type", security_type)
+        frames.append(part)
+    return pd.concat(frames, ignore_index=True)
+
+
+def build_group_summary(dashboard, columns):
+    tables = []
+    for variable in columns:
+        tmp = dashboard[["user_id", variable, "food_insecure", "fuel_insecure", "both_insecure"]].dropna(subset=[variable])
+        summary = tmp.groupby(variable, observed=True, as_index=False).agg(
+            respondent_count=("user_id", "nunique"),
+            food_insecurity_rate_pct=("food_insecure", lambda x: x.mean() * 100),
+            fuel_insecurity_rate_pct=("fuel_insecure", lambda x: x.mean() * 100),
+            both_insecure_rate_pct=("both_insecure", lambda x: x.mean() * 100),
+        ).rename(columns={variable: "category"})
+        summary.insert(0, "variable", variable)
+        tables.append(summary)
+    return pd.concat(tables, ignore_index=True)
+
+
+def build_borough_summary(dashboard):
+    borough = dashboard.groupby(["lad_code", "borough_name"], as_index=False).agg(
+        respondent_count=("user_id", "nunique"),
+        crime_rate_per_1000=(EDA_CRIME_RATE_COL, "first"),
+        log_crime_rate=("log_crime_rate", "first"),
+        crime_quartile=("crime_quartile", "first"),
+        crime_quartile_order=("crime_quartile_order", "first"),
+        food_insecurity_rate_pct=("food_insecure", lambda x: x.mean() * 100),
+        fuel_insecurity_rate_pct=("fuel_insecure", lambda x: x.mean() * 100),
+        both_insecure_rate_pct=("both_insecure", lambda x: x.mean() * 100),
+        mean_imd_decile=("imd_decile", "mean"),
+    )
+    optional = {
+        "crime_count_ye_dec2022": "crime_count",
+        "population_mid2022": "population",
+    }
+    for source, output in optional.items():
+        if source in dashboard:
+            values = dashboard.groupby("lad_code", as_index=False)[source].first().rename(columns={source: output})
+            borough = borough.merge(values, on="lad_code", how="left")
+    return borough
+
+
+def build_imd_summary(dashboard):
+    return dashboard.groupby("imd_decile", as_index=False).agg(
+        respondent_count=("user_id", "nunique"),
+        food_insecurity_rate_pct=("food_insecure", lambda x: x.mean() * 100),
+        fuel_insecurity_rate_pct=("fuel_insecure", lambda x: x.mean() * 100),
+        both_insecure_rate_pct=("both_insecure", lambda x: x.mean() * 100),
+    ).sort_values("imd_decile")
+
+
+def build_missing_summary(dashboard):
+    return pd.DataFrame({
+        "column": dashboard.columns,
+        "missing_count": dashboard.isna().sum().values,
+        "missing_percentage": dashboard.isna().mean().mul(100).values,
+        "unique_values": dashboard.nunique(dropna=True).values,
+        "data_type": dashboard.dtypes.astype(str).values,
+    }).sort_values("missing_percentage", ascending=False)
+
+
+def export_powerbi_csvs(df, output_dir=POWERBI_OUTPUT_DIR):
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    dashboard = prepare_powerbi_dashboard(df)
+    exports = {
+        "survey_dashboard.csv": dashboard,
+        "security_long.csv": build_security_long(dashboard),
+        "demographic_summary.csv": build_group_summary(dashboard, EDA_DEMOGRAPHIC_COLS),
+        "housing_summary.csv": build_group_summary(dashboard, EDA_HOUSING_COLS),
+        "borough_summary.csv": build_borough_summary(dashboard),
+        "imd_summary.csv": build_imd_summary(dashboard),
+        "missing_summary.csv": build_missing_summary(dashboard),
+    }
+    for filename, table in exports.items():
+        table.to_csv(output_dir / filename, index=False)
+    print(f"Saved {len(exports)} Power BI CSV files to {output_dir}")
+    return exports

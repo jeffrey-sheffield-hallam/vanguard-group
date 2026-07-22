@@ -1,0 +1,145 @@
+column,missing_count,missing_percentage,unique_values,data_type
+How often did this happen?.1,2886,100.0,0,float64
+CH5,2886,100.0,0,float64
+CH5a,2886,100.0,0,float64
+AD5a,2886,100.0,0,float64
+household_food_security_no_children,2886,100.0,0,float64
+How often did this happen?.2,2848,98.68329868329869,3,object
+Other.1,2800,97.02009702009701,73,object
+Other.2,2759,95.5994455994456,85,object
+Retired,2740,94.94109494109495,1,object
+Not working- long term sick or disabled,2699,93.52044352044352,1,object
+Student,2674,92.65419265419266,1,object
+Not working- looking after house/ children,2648,91.75329175329175,1,object
+Unemployed,2643,91.58004158004158,1,object
+Other,2588,89.67428967428968,82,object
+Neighbours,2555,88.53083853083852,1,object
+Community or faith group,2550,88.35758835758836,1,object
+Foodbank,2526,87.52598752598753,1,object
+Working part-time,2297,79.5911295911296,1,object
+About how many days over the past year has your household gone without heat because you could not afford to pay for gas or electricity?,2278,78.93277893277893,77,float64
+Close family or friends,2210,76.57657657657657,1,object
+AD1a,2082,72.14137214137214,2,float64
+How often did this happen?,2082,72.14137214137214,3,object
+CH4,1904,65.97366597366597,2,float64
+The children were not eating enough because we just couldn't afford enough food.,1903,65.93901593901595,3,object
+Did any of the children ever not eat for a whole day because there wasn't enough money for food?,1903,65.93901593901595,2,object
+Did you ever cut the size of any of the children's meals because there wasn't enough money for food?,1903,65.93901593901595,2,object
+Did any of the children ever skip meals because there wasn't enough money for food?,1903,65.93901593901595,2,object
+"We couldn't feed our children a balanced meal, because we couldn't afford that.",1903,65.93901593901595,3,object
+CH7,1903,65.93901593901595,2,float64
+CH1,1903,65.93901593901595,2,float64
+CH2,1903,65.93901593901595,2,float64
+CH3,1903,65.93901593901595,2,float64
+CH6,1903,65.93901593901595,2,float64
+child_security_score,1903,65.93901593901595,7,float64
+household_food_security_children,1903,65.93901593901595,16,float64
+"The next questions are about the food situation of your children. In the past 12 months, was the following statement true for you? 
+ 
+ We relied on only a few kinds of low-cost food to feed our children because we were running out of money to buy food.",1903,65.93901593901595,3,object
+Were the children ever hungry but you just couldn't afford more food?,1903,65.93901593901595,2,object
+Working full-time,1478,51.212751212751215,1,object
+AD5,1473,51.03950103950103,2,float64
+Did you or other adults in your household ever not eat for a whole day because there wasn't enough money for food?,1473,51.03950103950103,2,object
+Did you or other adults in your household ever cut the size of your meals or skip meals because there wasn't enough money for food?,1473,51.03950103950103,2,object
+Did you ever eat less than you felt you should because there wasn't enough money for food?,1473,51.03950103950103,2,object
+Did you lose weight because there wasn't enough money for food?,1473,51.03950103950103,2,object
+Were you ever hungry but didn't eat because there wasn't enough money for food?,1473,51.03950103950103,2,object
+AD4,1473,51.03950103950103,2,float64
+AD1,1473,51.03950103950103,2,float64
+AD2,1473,51.03950103950103,2,float64
+AD3,1473,51.03950103950103,2,float64
+None of the above,1273,44.10949410949411,1,object
+income_order,514,17.81011781011781,5,float64
+income_midpoint,514,17.81011781011781,5,float64
+rent_mortgage_worry,402,13.92931392931393,4,object
+housing_tenure_group,88,3.049203049203049,8,object
+HH2,1,0.03465003465003465,2,float64
+msoa_code,0,0.0,827,object
+survey_date,0,0.0,9,object
+lad_code,0,0.0,33,string
+incentivised,0,0.0,2,int64
+Submit Date (UTC),0,0.0,1382,object
+imd_decile,0,0.0,10,int64
+response_time,0,0.0,92,float64
+borough_name,0,0.0,33,object
+Start Date (UTC),0,0.0,1361,object
+user_id,0,0.0,2886,int64
+severe_fuel_insecure,0,0.0,2,float64
+private_renter,0,0.0,2,bool
+age_order,0,0.0,14,int64
+log_crime_rate,0,0.0,33,float64
+crime_quartile,0,0.0,4,category
+employment_status_group,0,0.0,8,object
+feel_isolated_ord,0,0.0,3,int64
+social_renter,0,0.0,2,bool
+fuel_security_status,0,0.0,2,object
+neighbour_exchange_score,0,0.0,4,int64
+social_support_score,0,0.0,6,float64
+income_band,0,0.0,6,object
+food_insecure,0,0.0,2,float64
+fuel_insecure,0,0.0,2,float64
+crime_rate_per_1000,0,0.0,33,float64
+food_security_status,0,0.0,2,object
+social_isolation_score,0,0.0,5,float64
+owner_occupier,0,0.0,2,bool
+both_insecure,0,0.0,2,float64
+neighbour_exchange_ord,0,0.0,4,int64
+family_help_ord,0,0.0,3,int64
+family_help_score,0,0.0,3,int64
+lack_companionship_ord,0,0.0,3,int64
+age_midpoint,0,0.0,14,float64
+severe_food_insecure,0,0.0,2,float64
+#,0,0.0,2886,object
+"In the past year, how frequently did your household keep your home at a cold temperature that you felt was unsafe or unhealthy?",0,0.0,4,object
+Consider your grocery shopping habits in the past 12 months. How often have you avoided food that requires cooking to reduce energy usage?,0,0.0,4,object
+food_security_label,0,0.0,4,object
+HH4,0,0.0,2,int64
+HH3,0,0.0,2,int64
+We couldn't afford to eat balanced meals.,0,0.0,3,object
+"The food that we bought just didn't last, and we didn't have money to get more.",0,0.0,3,object
+"The next questions are about your household's diet in the past 12 months, since October of last year, and whether you were able to afford the food you needed. In the past 12 months, was the following statement true for you?
+ 
+ We worried whether our food would run out before we got money to buy more.",0,0.0,3,object
+neighbour_exchange,0,0.0,4,object
+family_help,0,0.0,3,object
+feel_isolated,0,0.0,3,object
+lack_companionship,0,0.0,3,object
+life_comparison,0,0.0,5,object
+life_satisfaction,0,0.0,10,int64
+household_type,0,0.0,6,object
+health_condition,0,0.0,3,object
+age_group,0,0.0,14,object
+gender,0,0.0,4,object
+food_security_score,0,0.0,10,int64
+epc_rating,0,0.0,8,object
+energy_payment_worry,0,0.0,4,object
+prepayment_meter,0,0.0,3,object
+fuel_security_score,0,0.0,7,int64
+fuel_security_label,0,0.0,4,object
+FS7,0,0.0,2,int64
+FS6,0,0.0,2,int64
+FS5,0,0.0,2,int64
+FS4,0,0.0,2,int64
+FS3,0,0.0,2,int64
+FS2,0,0.0,2,int64
+FS1,0,0.0,2,int64
+"In the past year, did anyone in your household need medical attention because your home was too cold?",0,0.0,2,int64
+"In the last year, was there ever a time your household was unable to use your main source of heat because the equipment was broken, and you couldn't afford to pay to repair or replace the equipment?",0,0.0,2,int64
+"In the last year, was there ever a time your household was unable to use your main source of heat because you could not afford to pay for gas or electricity?",0,0.0,2,int64
+"In the past year, how frequently did your household run behind on payments for energy bills, or receive a notice to disconnect?",0,0.0,4,object
+"By agreeing to take part in this survey, you confirm that you have read, understood and agreed with the following statements. Please note that this survey will skip to the end if you disagree to take part: 
+ 
+ _I agree that data gathered in this study will be stored anonymously and securely, and will be used for research purposes only. _
+ 
+ _I understand that my participation is voluntary and that I am free to withdraw at any time without giving reason. _
+ 
+ _I understand that all personal information will remain confidentially within OLIO's database, and that no personally identifiable information will be shared with any third party, and that no data will be made available that can allow me to be personally identified in the results of this research. _
+ 
+ _I am 18 years of age or older. _
+ 
+ I agree to take part in this survey:",0,0.0,1,int64
+"The following questions are about challenges your household may have had paying energy bills or maintaining heating in your home in the past 12 months. 
+ 
+ How frequently did your household reduce or forego expenses for basic household necessities, such as medicine or food, in order to pay an energy bill?",0,0.0,4,object
+crime_quartile_order,0,0.0,4,category
