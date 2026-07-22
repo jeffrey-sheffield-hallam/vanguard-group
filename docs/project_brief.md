@@ -40,13 +40,15 @@ The dataset contains demographic information, deprivation indicators and anonymi
 
 The project will involve:
 
-- Data cleaning
+- Data cleaning and preprocessing
 - Exploratory Data Analysis (EDA)
 - Feature engineering
 - Machine learning classification
-- Model interpretation
+- Machine learning model development
+- Model evaluation and interpretation
+- Development of an interactive web application for prediction
 
-The objective is to identify the key drivers of food insecurity and energy insecurity.
+The web application serves as a practical demonstration of the trained models, allowing users to estimate their food insecurity and energy insecurity risk based on demographic, household, and area-level information.
 
 ---
 
@@ -58,6 +60,7 @@ The objective is to identify the key drivers of food insecurity and energy insec
 - Develop and compare machine learning classification models for predicting food insecurity and energy insecurity.
 - Evaluate the contribution of individual features to the model predictions using interpretable machine learning techniques.
 - Analyse and discuss the underlying drivers of food insecurity and energy insecurity based on the model outcomes.
+- Develop a web application to demonstrate the trained prediction models.
 
 ---
 
@@ -70,6 +73,7 @@ The project will deliver:
 - A feature engineered dataset incorporating additional environmental variables where appropriate.
 - Machine learning classification models and at least one deep learning model for predicting food insecurity and energy insecurity.
 - An explainability analysis identifying the key features influencing the model predictions.
+- Interactive prediction web application
 - A final report summarising:
   - Methodology
   - Results
@@ -127,3 +131,7 @@ External environmental datasets, such as crime statistics and green space measur
 During feature engineering and model development, care will be taken to avoid data leakage. Collaborative development will be managed through Git and GitHub.
 
 ---
+
+# Acknowledgements
+
+This project is undertaken as part of the MSc Artificial Intelligence programme at Sheffield Hallam University under the supervision of **Dr Gregor Milligan**.
