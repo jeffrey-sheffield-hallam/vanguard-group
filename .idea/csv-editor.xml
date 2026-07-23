@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\data\finalised_dataset\fuel_security_fully_coded_v2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\data\unified_csv\Food_insecurity_Raw_Survey_Responses.csv">
           <value>
             <Attribute>
@@ -32,6 +39,20 @@
           </value>
         </entry>
         <entry key="\data\unified_csv\column_classes.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\outputs\Training\food\tensorflow_test_predictions.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\outputs\Training\food\tensorflow_training_history.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
