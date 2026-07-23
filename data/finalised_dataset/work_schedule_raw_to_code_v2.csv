@@ -1,0 +1,129 @@
+Work_Schedule_raw,Work_Schedule_clean,Work_Schedule_Code
+,Unknown,0
+Prefer not to say,Prefer not to say,1
+Fixed contract,Working full-time / contract,2
+Full time carer,Working full-time / contract,2
+Full time mum,Working full-time / contract,2
+Maternity leave from full time job,Working full-time / contract,2
+Not working - full time at home carer as well as being unwell myself,Working full-time / contract,2
+Self-employed and unable to work full-time owing to illness/disability,Working full-time / contract,2
+Short-term contracts,Working full-time / contract,2
+Working full-time,Working full-time / contract,2
+Working full-timeAgency work as well.,Working full-time / contract,2
+Working full-timeAnd caring for family member in another household,Working full-time / contract,2
+Working full-timeJust started a 6 month job a month ago but prior to that was unemployed for many years,Working full-time / contract,2
+Working full-timeNot working- long term sick or disabledStudent,Working full-time / contract,2
+Working full-timeNot working- looking after house/ children,Working full-time / contract,2
+Working full-timeNot working- looking after house/ childrenNot working- long term sick or disabled,Working full-time / contract,2
+Working full-timeRetired,Working full-time / contract,2
+Working full-timeSelf employed,Working full-time / contract,2
+Working full-timeSelf-employed,Working full-time / contract,2
+Working full-timeStarting my own business so currently unpaid,Working full-time / contract,2
+Working full-timeStudent,Working full-time / contract,2
+Working full-timeUnemployed,Working full-time / contract,2
+Working full-timeWork in the home as a homemaker too.,Working full-time / contract,2
+Working full-timeWorking full time- maternity leave,Working full-time / contract,2
+Working full-timeWorking part-time,Working full-time / contract,2
+Working full-timeWorking part-timeStudent,Working full-time / contract,2
+"Working full-timeWorking part-timeStudentI'm a freelancer, so work comes and goes",Working full-time / contract,2
+Working full-timeWorking part-timeUnemployed,Working full-time / contract,2
+contract role,Working full-time / contract,2
+full time carer,Working full-time / contract,2
+retired and doing casual agency work,Working full-time / contract,2
+temporary contract starting in January 2023,Working full-time / contract,2
+Casual worker,Working part-time / casual,3
+On maternity leave from part time work,Working part-time / casual,3
+RetiredOccassional parttime work,Working part-time / casual,3
+Student and working 2 part-time jobs,Working part-time / casual,3
+Working part-time,Working part-time / casual,3
+Working part-timeFul time mother,Working part-time / casual,3
+Working part-timeI have been made redundant,Working part-time / casual,3
+Working part-timeNot working- long term sick or disabled,Working part-time / casual,3
+Working part-timeNot working- looking after house/ children,Working part-time / casual,3
+Working part-timeNot working- looking after house/ childrenMaternity Leave,Working part-time / casual,3
+Working part-timeNot working- looking after house/ childrenNot working- long term sick or disabled,Working part-time / casual,3
+Working part-timeNot working- looking after house/ childrenStudent,Working part-time / casual,3
+Working part-timeOn a zero hour contract so every month money coming in varies,Working part-time / casual,3
+Working part-timeRetired,Working part-time / casual,3
+Working part-timeRetiredNot working- long term sick or disabled,Working part-time / casual,3
+Working part-timeSelf employed,Working part-time / casual,3
+Working part-timeSelf-employed,Working part-time / casual,3
+Working part-timeStudent,Working part-time / casual,3
+Working part-timeUnemployed,Working part-time / casual,3
+Working part-timeUnemployedNot working- long term sick or disabled,Working part-time / casual,3
+Zero hour contract,Working part-time / casual,3
+Zero hour contracts,Working part-time / casual,3
+occasional work,Working part-time / casual,3
+Freelance,Self-employed / freelance,4
+Freelancer,Self-employed / freelance,4
+"Freelancing but struggling to find work (at times, for months). Relying on savings and my partner's wage for now.",Self-employed / freelance,4
+"I'm self-employed but on benefits, hence not worrying about rent",Self-employed / freelance,4
+Not working- looking after house/ childrenSelf employed,Self-employed / freelance,4
+Own business and look after children,Self-employed / freelance,4
+Run my own business but not been able to pay myself for well over a year,Self-employed / freelance,4
+Self Employed,Self-employed / freelance,4
+Self employed,Self-employed / freelance,4
+Self employed / post baby,Self-employed / freelance,4
+Self employed freelance,Self-employed / freelance,4
+Self-employed,Self-employed / freelance,4
+Starting up a new business and self employed,Self-employed / freelance,4
+Working freelance,Self-employed / freelance,4
+self employed,Self-employed / freelance,4
+self employed but looking for work,Self-employed / freelance,4
+Retired,Retired,5
+RetiredHealth issues and leg problems,Retired,5
+RetiredNot working- long term sick or disabled,Retired,5
+RetiredNot working- long term sick or disabledCarer,Retired,5
+RetiredNot working- looking after house/ children,Retired,5
+RetiredNot working- looking after house/ childrenLooking after grandchildren,Retired,5
+RetiredStudent,Retired,5
+RetiredVolunteer unpaid,Retired,5
+Semi retired,Retired,5
+UnemployedRetired,Retired,5
+Not working- long term sick or disabledStudent,Student,6
+Not working- looking after house/ childrenStudent,Student,6
+Student,Student,6
+UnemployedNot working- looking after house/ childrenStudent,Student,6
+UnemployedStudent,Student,6
+About to start working,Unemployed / seeking work,7
+In and out of work,Unemployed / seeking work,7
+Looking for a new job.,Unemployed / seeking work,7
+Unemployed,Unemployed / seeking work,7
+UnemployedHomeless,Unemployed / seeking work,7
+UnemployedNot working- long term sick or disabled,Unemployed / seeking work,7
+UnemployedNot working- looking after house/ children,Unemployed / seeking work,7
+Can't work,Long-term sick / unable to work,8
+Carer for disabled child,Long-term sick / unable to work,8
+Carer for disabled daughter,Long-term sick / unable to work,8
+Carer for disabled family member,Long-term sick / unable to work,8
+Living off savings as long term sickm,Long-term sick / unable to work,8
+Not working- long term sick or disabled,Long-term sick / unable to work,8
+Not working- long term sick or disabledPhased return to work,Long-term sick / unable to work,8
+Not working- looking after house/ childrenNot working- long term sick or disabled,Long-term sick / unable to work,8
+CARER,Caring / homemaking / leave,9
+Carer,Caring / homemaking / leave,9
+Carer to my son,Caring / homemaking / leave,9
+House wife,Caring / homemaking / leave,9
+I have a baby at home. Plus my partner has disability,Caring / homemaking / leave,9
+I'm a carer for my elderly mother,Caring / homemaking / leave,9
+Looking after elderly family members,Caring / homemaking / leave,9
+Maternity leave,Caring / homemaking / leave,9
+Maternity leave - unpaid,Caring / homemaking / leave,9
+Not working- looking after house/ children,Caring / homemaking / leave,9
+Not working- looking after house/ childrenCarer for family member,Caring / homemaking / leave,9
+Not working- looking after house/ childrenCaring for elderly unwell father at home,Caring / homemaking / leave,9
+On maternity leave,Caring / homemaking / leave,9
+Unpaid carer,Caring / homemaking / leave,9
+Volunteering,Volunteering,10
+Apprentice,Apprentice,11
+Asylum,Other economically inactive,12
+Asylum seeker,Other economically inactive,12
+No trabajo por ser asilado,Other economically inactive,12
+Sabbatical,Other economically inactive,12
+Taking some time off,Other economically inactive,12
+economically inactive and not looking for work,Other economically inactive,12
+.,Other / unclear,13
+Cairo,Other / unclear,13
+On a temporary placement,Other / unclear,13
+Self enployed,Other / unclear,13
+on my own,Other / unclear,13
