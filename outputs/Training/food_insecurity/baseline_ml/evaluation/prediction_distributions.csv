@@ -1,0 +1,17 @@
+Model,Class,Predicted_Count,Predicted_Percentage
+Logistic Regression,High,348,80.36951501154735
+Logistic Regression,Marginal,0,0.0
+Logistic Regression,Low,7,1.6166281755196306
+Logistic Regression,Very Low,78,18.013856812933028
+Random Forest,High,348,80.36951501154735
+Random Forest,Marginal,5,1.1547344110854503
+Random Forest,Low,8,1.8475750577367205
+Random Forest,Very Low,72,16.628175519630485
+XGBoost,High,328,75.75057736720554
+XGBoost,Marginal,10,2.3094688221709005
+XGBoost,Low,9,2.0785219399538106
+XGBoost,Very Low,86,19.861431870669747
+CatBoost,High,340,78.52193995381063
+CatBoost,Marginal,1,0.23094688221709006
+CatBoost,Low,7,1.6166281755196306
+CatBoost,Very Low,85,19.630484988452658
