@@ -1,0 +1,93 @@
+{
+  "project": "Drivers of Food Insecurity in London, United Kingdom",
+  "target": "food_security_score",
+  "target_type": "ordinal_multiclass_classification",
+  "class_mapping": {
+    "0": "High",
+    "1": "Marginal",
+    "2": "Low",
+    "3": "Very Low"
+  },
+  "raw_score_mapping": {
+    "0-1": "High",
+    "2-3": "Marginal",
+    "4-6": "Low",
+    "7-9": "Very Low"
+  },
+  "random_state": 42,
+  "split": {
+    "train": 0.7,
+    "validation": 0.15,
+    "test": 0.15,
+    "stratified": true
+  },
+  "features": [
+    "Gender_Code",
+    "Work_Schedule_Code",
+    "Age_range_Code",
+    "Household_type_code",
+    "Life_satisfaction",
+    "Isolation_score",
+    "Social_support_score",
+    "Housing_tenure_group_code",
+    "Income_Code",
+    "imd_decile",
+    "green_space_pct",
+    "park_distance_m",
+    "crime_rate_per_1000"
+  ],
+  "feature_order": [
+    "Gender_Code",
+    "Work_Schedule_Code",
+    "Age_range_Code",
+    "Household_type_code",
+    "Life_satisfaction",
+    "Isolation_score",
+    "Social_support_score",
+    "Housing_tenure_group_code",
+    "Income_Code",
+    "imd_decile",
+    "green_space_pct",
+    "park_distance_m",
+    "crime_rate_per_1000"
+  ],
+  "nominal_features": [
+    "Gender_Code",
+    "Work_Schedule_Code",
+    "Household_type_code",
+    "Housing_tenure_group_code"
+  ],
+  "ordinal_features": [
+    "Age_range_Code",
+    "Income_Code",
+    "imd_decile"
+  ],
+  "continuous_features": [
+    "Life_satisfaction",
+    "Isolation_score",
+    "Social_support_score",
+    "green_space_pct",
+    "park_distance_m",
+    "crime_rate_per_1000"
+  ],
+  "excluded_columns": [
+    "participant_id",
+    "food_security_score",
+    "Lad_code_code",
+    "msoa_code_code"
+  ],
+  "selected_variants": {
+    "Logistic Regression": "improved",
+    "Random Forest": "improved",
+    "XGBoost": "improved",
+    "CatBoost": "improved"
+  },
+  "versions": {
+    "python": "3.10.18",
+    "pandas": "2.3.3",
+    "numpy": "1.26.4",
+    "scikit_learn": "1.7.2",
+    "xgboost": "3.0.5",
+    "catboost": "1.2.10"
+  }
+}
